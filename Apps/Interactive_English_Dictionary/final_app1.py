@@ -1,12 +1,20 @@
-import json
+import mysql.connector
 from difflib import get_close_matches
 
-data = json.load(open("data.json"))
+# implement exercise.py with app1.py
 
-# make sure to match app1.py
 def translate(word):
+    con = mysql.connector.connect(
+        user="ardit700_student",
+        password="ardit700_student",
+        host="108.167.140.122",
+        database="ardit700_pm1database"
+    )
+
     word = word.lower()
     if word in data:
+        query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s' " % word)
+        results = cursor.fetchall()
         return data[word]
     elif word.title() in data:
         return data[word.title()]
@@ -24,6 +32,10 @@ def translate(word):
         return "The word doesn't exist. Please double check it."
 
 
+
+
+cursor = con.cursor()
+
 word = input("Enter word: ")
 
 output = translate(word)
@@ -33,3 +45,13 @@ if type(output) == list:
         print(item)
 else:
     print(output)
+
+
+
+
+
+if results:
+    for result in results:
+        print(result[1])
+else:
+    print("No word found")
